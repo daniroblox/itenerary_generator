@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pack & Plot | Planner</title>
+<link rel="stylesheet" href="css/tailwind.css">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="planner">
+<header class="site-header">
+    <div class="nav-shell">
+        <a class="brand" href="index.html">
+            <span class="brand-mark">P</span>
+            <div>
+                <p class="eyebrow">AI Travel Planner</p>
+                <strong>Pack & Plot</strong>
+            </div>
+        </a>
+        <nav class="top-nav">
+            <a href="index.html">Home</a>
+            <a href="planner.html" class="is-active">Planner</a>
+            <a href="testaments.html">Testaments</a>
+            <a href="login.html">Login</a>
+            <a href="signup.html">Sign Up</a>
+        </nav>
+        <div class="nav-cta">
+            <button class="btn ghost" id="googleLoginBtn" type="button">Google Login</button>
+            <button class="btn secondary" id="logoutBtn" type="button" hidden>Logout</button>
+        </div>
+    </div>
+</header>
+
+<main class="page-shell">
+    <section class="planner-hero">
+        <div>
+            <p class="eyebrow">Planning Dashboard</p>
+            <h1>Build realistic itineraries and edit them like a real product</h1>
+            <p class="hero-text">
+                Generate destination-aware plans, adjust every day, save multiple trips, and manage your
+                freemium experience from one planner dashboard.
+            </p>
+        </div>
+        <aside class="glass-card status-panel">
+            <p class="card-label">Account Status</p>
+            <h2 id="accountGreeting">Guest mode</h2>
+            <p id="subscriptionBadge" class="pill">Free Plan</p>
+            <div class="status-grid">
+                <div>
+                    <span>Trips this month</span>
+                    <strong id="usageCount">0 / 2</strong>
+                </div>
+                <div>
+                    <span>Saved itineraries</span>
+                    <strong id="savedCount">0</strong>
+                </div>
+            </div>
+        </aside>
+    </section>
+
+    <section class="planner-layout">
+        <section class="section-card">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Traveler Profile</p>
+                    <h2>Preference-based planning</h2>
+                </div>
+                <p class="section-copy">Profile details are reused by the generator to make plans feel more personal.</p>
+            </div>
+            <form id="profileForm" class="form-grid">
+                <label>
+                    Full name
+                    <input type="text" id="profileName" placeholder="Juan Dela Cruz">
+                </label>
+                <label>
+                    Email
+                    <input type="email" id="profileEmail" placeholder="juan@email.com">
+                </label>
+                <label>
+                    Home city
+                    <input type="text" id="profileHomeBase" placeholder="Quezon City">
+                </label>
+                <label>
+                    Preferred traveler type
+                    <select id="profileTravelerType">
+                        <option value="Solo">Solo</option>
+                        <option value="Family">Family</option>
+                        <option value="Couple">Couple</option>
+                        <option value="Friends">Friends</option>
+                    </select>
+                </label>
+                <label>
+                    Preferred lifestyle
+                    <select id="profileLifestyle">
+                        <option value="Budget">Budget</option>
+                        <option value="Mid-range">Mid-range</option>
+                        <option value="Luxury">Luxury</option>
+                    </select>
+                </label>
+                <label>
+                    Favorite mood
+                    <select id="profileMood">
+                        <option value="Relaxing">Relaxing</option>
+                        <option value="Adventure">Adventure</option>
+                        <option value="Food Trip">Food Trip</option>
+                        <option value="Culture">Culture</option>
+                    </select>
+                </label>
+                <label class="full-span">
+                    Travel notes
+                    <textarea id="profileNotes" rows="3" placeholder="Coffee shops, museums, family-friendly places, scenic routes..."></textarea>
+                </label>
+                <div class="full-span form-actions">
+                    <button type="submit" class="btn primary">Save Profile</button>
+                </div>
+            </form>
+        </section>
+
+        <aside class="section-card side-panel">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Subscription</p>
+                    <h2>Freemium controls</h2>
+                </div>
+            </div>
+            <ul class="feature-list">
+                <li>Free users can create up to 2 itineraries each month.</li>
+                <li>Premium unlocks advanced filters and unlimited generations.</li>
+                <li>Saved trips stay inside this browser through local storage.</li>
+            </ul>
+            <div class="stacked-actions">
+                <button class="btn primary full" id="upgradeBtn" type="button">Upgrade to Premium</button>
+                <button class="btn ghost full" id="starterPlanBtn" type="button">Switch to Free</button>
+            </div>
+        </aside>
+    </section>
+
+    <section class="section-card">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">AI Itinerary Generator</p>
+                <h2>Create your trip</h2>
+            </div>
+            <p class="section-copy">The generator uses destination logic, travel dates, trip purpose, and style filters.</p>
+        </div>
+        <div class="destination-picker" id="destinationPicker">
+            <button class="destination-card destination-baguio" type="button" data-destination-choice="Baguio" data-mood-choice="Culture">
+                <span>Mountain City</span>
+                <strong>Baguio</strong>
+                <small>Culture, cafes, parks</small>
+            </button>
+            <button class="destination-card destination-siargao" type="button" data-destination-choice="Siargao" data-mood-choice="Adventure">
+                <span>Surf Island</span>
+                <strong>Siargao</strong>
+                <small>Surf, lagoons, beach days</small>
+            </button>
+            <button class="destination-card destination-palawan" type="button" data-destination-choice="Palawan" data-mood-choice="Relaxing">
+                <span>Island Escape</span>
+                <strong>Palawan</strong>
+                <small>Lagoons, reefs, slow travel</small>
+            </button>
+            <button class="destination-card destination-cebu" type="button" data-destination-choice="Cebu" data-mood-choice="Food Trip">
+                <span>Heritage Coast</span>
+                <strong>Cebu</strong>
+                <small>Food, history, day trips</small>
+            </button>
+            <button class="destination-card destination-boracay" type="button" data-destination-choice="Boracay" data-mood-choice="Relaxing">
+                <span>Beach Classic</span>
+                <strong>Boracay</strong>
+                <small>White sand, nightlife, sunsets</small>
+            </button>
+            <button class="destination-card destination-batanes" type="button" data-destination-choice="Batanes" data-mood-choice="Culture">
+                <span>Scenic North</span>
+                <strong>Batanes</strong>
+                <small>Views, heritage, quiet routes</small>
+            </button>
+        </div>
+        <form id="plannerForm">
+            <div class="form-grid">
+                <label>
+                    Destination
+                    <input type="text" id="destination" placeholder="Baguio" required>
+                </label>
+                <label>
+                    Start date
+                    <input type="date" id="startDate" required>
+                </label>
+                <label>
+                    End date
+                    <input type="date" id="endDate" required>
+                </label>
+                <label>
+                    Budget (PHP)
+                    <input type="number" id="budget" min="0" placeholder="20000" required>
+                </label>
+                <label>
+                    Travel duration
+                    <select id="duration">
+                        <option value="1-3 days">1-3 days</option>
+                        <option value="4-7 days" selected>4-7 days</option>
+                        <option value="8-14 days">8-14 days</option>
+                        <option value="15+ days">15+ days</option>
+                    </select>
+                </label>
+                <label>
+                    Traveler type
+                    <select id="travelerType">
+                        <option value="Solo">Solo</option>
+                        <option value="Family">Family</option>
+                        <option value="Couple">Couple</option>
+                        <option value="Friends">Friends</option>
+                    </select>
+                </label>
+                <label>
+                    Mood
+                    <select id="mood">
+                        <option value="Relaxing">Relaxing</option>
+                        <option value="Adventure">Adventure</option>
+                        <option value="Food Trip">Food Trip</option>
+                        <option value="Culture">Culture</option>
+                    </select>
+                </label>
+                <label>
+                    Behavior
+                    <select id="behavior">
+                        <option value="Balanced">Balanced</option>
+                        <option value="Fast-paced">Fast-paced</option>
+                        <option value="Chill">Chill</option>
+                    </select>
+                </label>
+                <label>
+                    Lifestyle
+                    <select id="lifestyle">
+                        <option value="Budget">Budget</option>
+                        <option value="Mid-range">Mid-range</option>
+                        <option value="Luxury">Luxury</option>
+                    </select>
+                </label>
+                <label>
+                    Purpose of travel
+                    <select id="purpose">
+                        <option value="Vacation">Vacation</option>
+                        <option value="Business">Business</option>
+                        <option value="Adventure">Adventure</option>
+                    </select>
+                </label>
+            </div>
+            <div class="filter-chips">
+                <span>Suggested attractions</span>
+                <span>Daily schedule</span>
+                <span>Editable activities</span>
+                <span class="premium-chip">Advanced filters</span>
+                <span class="premium-chip">Smart route optimization</span>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn primary">Generate Itinerary</button>
+                <button type="button" class="btn secondary" id="fillSampleBtn">Load Sample Trip</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="section-card itinerary-section" id="itinerarySection">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Editable Itinerary</p>
+                <h2 id="itineraryTitle">Your itinerary will appear here</h2>
+            </div>
+            <p class="section-copy" id="itinerarySummary">Generate a trip to unlock drag-and-drop editing and travel actions.</p>
+        </div>
+        <div class="itinerary-actions">
+            <button class="btn" id="addDayBtn" disabled type="button">Add Day</button>
+            <button class="btn" id="saveTripBtn" disabled type="button">Save Travel Plan</button>
+            <button class="btn" id="downloadBtn" disabled type="button">Download PDF</button>
+            <button class="btn" id="shareBtn" disabled type="button">Share Link</button>
+        </div>
+        <div id="tripInsights" class="insights-grid"></div>
+        <div id="itineraryDays" class="days-grid">
+            <div class="empty-state">
+                <h3>No itinerary yet</h3>
+                <p>Use the generator above to create a realistic trip plan.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-card saved-section">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Saved Trips</p>
+                <h2>Your itinerary library</h2>
+            </div>
+            <p class="section-copy">Use saved plans to support your travel planning and trip review process.</p>
+        </div>
+        <div id="savedTrips" class="saved-grid">
+            <div class="empty-state compact">
+                <h3>No saved plans</h3>
+                <p>Save a generated itinerary to build your travel planning portfolio.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
+

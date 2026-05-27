@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pack & Plot | Marketplace</title>
+
+<link rel="icon" type="image/jpeg" href="../images/image.png">
+<link rel="stylesheet" href="../css/tailwind.css">
+<link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body data-page="marketplace">
+
+<header class="site-header">
+    <div class="nav-shell">
+        <a class="brand" href="../index.html" aria-label="Pack & Plot home">
+            <img class="brand-mark" src="../images/image.png" alt="Pack & Plot logo">
+        </a>
+
+        <nav class="top-nav">
+            <a href="../index.html">Home</a>
+            <a href="planner.html">Planner</a>
+            <a href="marketplace.html" class="is-active">Marketplace</a>
+            <a href="testaments.html">Testaments</a>
+            <a href="login.html">Login</a>
+            <a href="signup.html">Sign Up</a>
+        </nav>
+
+        <div class="nav-cta">
+            <button class="btn ghost" id="googleLoginBtn" type="button">Google Login</button>
+            <button class="btn secondary" id="logoutBtn" type="button" hidden>Logout</button>
+        </div>
+    </div>
+</header>
+
+<main class="page-shell">
+
+    <section class="planner-hero">
+        <div>
+            <p class="eyebrow">Travel Marketplace</p>
+
+            <h1>
+                Discover trusted travel suppliers and experiences
+            </h1>
+
+            <p class="hero-text">
+                Browse vetted food partners, activities, tour guides,
+                hotels, and travel experiences that can be added directly
+                to your itinerary plans.
+            </p>
+        </div>
+
+        <aside class="glass-card status-panel">
+            <p class="card-label">Marketplace Revenue</p>
+
+            <h2>Business Model</h2>
+
+            <div class="status-grid">
+                <div>
+                    <span>Primary</span>
+                    <strong>Marketplace Commission</strong>
+                </div>
+
+                <div>
+                    <span>Secondary</span>
+                    <strong>Advertisements</strong>
+                </div>
+            </div>
+        </aside>
+    </section>
+
+    <section class="section-card">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Supplier Categories</p>
+                <h2>Explore marketplace services</h2>
+            </div>
+
+            <p class="section-copy">
+                Trusted suppliers and travel partners integrated with
+                itinerary planning.
+            </p>
+        </div>
+
+        <div class="filter-chips">
+            <span>FNB</span>
+            <span>Activities</span>
+            <span>Tour Guides</span>
+            <span>Hotels</span>
+            <span>Transportation</span>
+        </div>
+    </section>
+
+    <section class="section-card">
+
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Featured Suppliers</p>
+                <h2>Recommended travel experiences</h2>
+            </div>
+
+            <p class="section-copy">
+                Curated suppliers based on popularity, quality,
+                and itinerary compatibility.
+            </p>
+        </div>
+
+        <div class="saved-grid">
+
+            <div class="trip-card">
+                <img
+                    src="https://images.unsplash.com/photo-1504674900247-0877df9cc836"
+                    alt="Breakfast Buffet"
+                    class="market-image"
+                >
+
+                <div class="trip-card-body">
+                    <p class="pill">FNB</p>
+
+                    <h3>Breakfast Buffet</h3>
+
+                    <p>
+                        Start your itinerary with partner restaurants
+                        offering breakfast meals and coffee experiences.
+                    </p>
+
+                    <div class="trip-meta">
+                        <span>⭐ 4.8</span>
+                        <span>₱299 - ₱599</span>
+                    </div>
+
+                    <button class="btn primary full">
+                        Add to Itinerary
+                    </button>
+                </div>
+            </div>
+
+            <div class="trip-card">
+                <img
+                    src="https://images.unsplash.com/photo-1469474968028-56623f02e42e"
+                    alt="Island Hopping"
+                    class="market-image"
+                >
+
+                <div class="trip-card-body">
+                    <p class="pill">Activities</p>
+
+                    <h3>Island Hopping Tour</h3>
+
+                    <p>
+                        Guided island hopping experience with
+                        transportation and snorkeling package.
+                    </p>
+
+                    <div class="trip-meta">
+                        <span>⭐ 4.9</span>
+                        <span>₱1,500</span>
+                    </div>
+
+                    <button class="btn primary full">
+                        Add to Itinerary
+                    </button>
+                </div>
+            </div>
+
+            <div class="trip-card">
+                <img
+                    src="https://images.unsplash.com/photo-1527631746610-bca00a040d60"
+                    alt="Tour Guide"
+                    class="market-image"
+                >
+
+                <div class="trip-card-body">
+                    <p class="pill">Tour Guide</p>
+
+                    <h3>Verified Local Guide</h3>
+
+                    <p>
+                        Explore destinations with verified guides
+                        familiar with culture and local attractions.
+                    </p>
+
+                    <div class="trip-meta">
+                        <span>⭐ 5.0</span>
+                        <span>₱2,000/day</span>
+                    </div>
+
+                    <button class="btn primary full">
+                        Book Guide
+                    </button>
+                </div>
+            </div>
+
+            <div class="trip-card">
+                <img
+                    src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267"
+                    alt="Hotel"
+                    class="market-image"
+                >
+
+                <div class="trip-card-body">
+                    <p class="pill">Hotel</p>
+
+                    <h3>Partner Hotel Stay</h3>
+
+                    <p>
+                        Premium accommodations integrated directly
+                        into itinerary schedules and trip budgeting.
+                    </p>
+
+                    <div class="trip-meta">
+                        <span>⭐ 4.7</span>
+                        <span>₱3,500/night</span>
+                    </div>
+
+                    <button class="btn primary full">
+                        Reserve Room
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section-card">
+
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Sponsored Listings</p>
+                <h2>Marketplace advertisements</h2>
+            </div>
+
+            <p class="section-copy">
+                Sponsored brands and promoted travel experiences.
+            </p>
+        </div>
+
+        <div class="saved-grid">
+
+            <div class="glass-card">
+                <p class="pill premium-chip">Sponsored</p>
+
+                <h3>ABC Resort</h3>
+
+                <p>
+                    Beachfront luxury resort promoted through the
+                    Pack & Plot marketplace platform.
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <p class="pill premium-chip">Featured</p>
+
+                <h3>Seafood House</h3>
+
+                <p>
+                    Popular seafood restaurant included in food-trip
+                    itineraries and destination recommendations.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+<script src="../js/script.js"></script>
+
+</body>
+</html>

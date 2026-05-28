@@ -207,6 +207,60 @@ function init() {
         renderPlannerState();
     }
 }
+//a dded today 5/28
+const marketplaceItems = {
+    "walking-tour-baguio": {
+        title: "Baguio Creative Walking Tour (ABC Company)",
+        time: "10:00",
+        detail: "Guided walking tour featuring creative spots and local stories in Baguio."
+    },
+
+    "hotel-john-hay": {
+        title: "John Hay Hotels - Room Reservation",
+        time: "14:00",
+        detail: "Overnight stay at Camp John Hay with scenic mountain view."
+    },
+
+    "sky-ranch-baguio": {
+        title: "Sky Ranch Baguio Activity Pass",
+        time: "13:00",
+        detail: "Amusement park rides and attractions in Baguio."
+    }
+};
+
+window.addToItinerary = function(id) {
+    const item = marketplaceItems[id];
+    if (!item) return;
+
+    localStorage.setItem("pendingMarketplaceItem", JSON.stringify(item));
+
+    window.location.href = "planner.html";
+};
+
+function hydrateMarketplacePick() {
+    const raw = localStorage.getItem("packplot.marketplacePick");
+    if (!raw) return;
+
+    const item = JSON.parse(raw);
+    localStorage.removeItem("packplot.marketplacePick");
+
+    if (!state.currentTrip) {
+        toast("Generate a trip first before adding marketplace item.");
+        return;
+    }
+
+    const day = state.currentTrip.days[0];
+
+    day.activities.push({
+        id: createId("activity"),
+        time: item.time || "12:00",
+        title: item.title,
+        detail: item.detail
+    });
+
+    renderCurrentTrip();
+    toast("Marketplace item added!");
+} //added
 
 function cacheRefs() {
     [
@@ -1223,3 +1277,54 @@ function toast(message) {
     }, 2400);
 }
 
+// added today 5/28
+window.addEventListener("DOMContentLoaded", () => {
+    const raw = localStorage.getItem("pendingMarketplaceItem");
+    if (!raw) return;
+
+    const item = JSON.parse(raw);
+    localStorage.removeItem("pendingMarketplaceItem");
+
+    if (!state.currentTrip) {
+        state.currentTrip = {
+            id: createId("trip"),
+            destination: "Marketplace Booking",
+            durationLabel: "1 day",
+            dateLabel: "Today",
+            travelerType: "Solo",
+            mood: "Relaxing",
+            plan: "free",
+            title: "Marketplace Trip",
+            summary: "Auto created from marketplace",
+            planNote: "Marketplace injected",
+            routeLogic: "Manual",
+            travelerSummary: "Solo traveler",
+            destinationNote: "Marketplace booking",
+            budgetBand: "N/A",
+            days: [{
+                id: createId("day"),
+                title: "Day 1",
+                note: "Marketplace Day",
+                activities: []
+            }]
+        };
+    }
+
+    state.currentTrip.days[0].activities.push({
+        id: createId("activity"),
+        time: item.time || "10:00",
+        title: item.title,
+        detail: item.detail
+    });
+
+    renderPlannerState();
+
+    toast("Added marketplace booking!");
+});
+
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-market-id]");
+    if (!btn) return;
+
+    addToItinerary(btn.dataset.marketId);
+});

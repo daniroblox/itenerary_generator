@@ -210,21 +210,147 @@ function init() {
 //a dded today 5/28
 const marketplaceItems = {
     "walking-tour-baguio": {
-        title: "Baguio Creative Walking Tour (ABC Company)",
+        title: "Baguio Creative Walking Tour",
         time: "10:00",
-        detail: "Guided walking tour featuring creative spots and local stories in Baguio."
+        detail: "Guided cultural walking tour featuring creative spots and local stories in Baguio."
     },
 
     "hotel-john-hay": {
-        title: "John Hay Hotels - Room Reservation",
+        title: "John Hay Hotels Reservation",
         time: "14:00",
-        detail: "Overnight stay at Camp John Hay with scenic mountain view."
+        detail: "Hotel check-in reservation inside Camp John Hay."
+    },
+
+    "four-points-palawan": {
+        title: "Four Points by Sheraton Palawan",
+        time: "15:00",
+        detail: "Beachfront resort stay in Palawan."
+    },
+
+    "harana-surf-resort": {
+        title: "Harana Surf Resort Stay",
+        time: "14:00",
+        detail: "Relaxing surf resort accommodation in Siargao."
+    },
+
+    "shangrila-mactan": {
+        title: "Shangri-La Mactan Cebu",
+        time: "15:00",
+        detail: "Luxury beachfront Cebu resort booking."
+    },
+
+    "fundacion-pacita": {
+        title: "Fundacion Pacita Batanes",
+        time: "14:00",
+        detail: "Hilltop heritage hotel experience in Batanes."
+    },
+
+    "henann-regency": {
+        title: "Henann Regency Resort & Spa",
+        time: "15:00",
+        detail: "Beachfront Boracay resort accommodation."
+    },
+
+    "south-shore-siargao": {
+        title: "South Shore Siargao Tours",
+        time: "09:00",
+        detail: "Island hopping and guided Siargao tour."
+    },
+
+    "island-trek-cebu": {
+        title: "Island Trek Tours Cebu",
+        time: "08:30",
+        detail: "Cebu city and mountain guided tour."
+    },
+
+    "ivatan-guides": {
+        title: "Ivatan Cultural Guides",
+        time: "09:00",
+        detail: "Cultural Batanes guided experience."
     },
 
     "sky-ranch-baguio": {
-        title: "Sky Ranch Baguio Activity Pass",
-        time: "13:00",
-        detail: "Amusement park rides and attractions in Baguio."
+        title: "Sky Ranch Baguio Visit",
+        time: "16:00",
+        detail: "Enjoy rides and scenic attractions in Baguio."
+    },
+
+    "harana-surf-school": {
+        title: "Harana Surf School",
+        time: "07:00",
+        detail: "Surf lessons and board rental in Siargao."
+    },
+
+    "7-wonders-palawan": {
+        title: "7 Wonders Adventures Tour",
+        time: "08:00",
+        detail: "Island and land tours around Palawan."
+    },
+
+    "badian-canyoneering": {
+        title: "Badian Cebu Canyoneering",
+        time: "06:00",
+        detail: "Adventure canyoneering activity in Cebu."
+    },
+
+    "underground-river": {
+        title: "Puerto Princesa Underground River Tour",
+        time: "08:00",
+        detail: "Guided underground river eco-tour."
+    },
+
+    "batanes-island-hopping": {
+        title: "Batanes Island Hopping",
+        time: "09:00",
+        detail: "Scenic island hopping activity in Batanes."
+    },
+
+    "boracay-adventures": {
+        title: "Boracay Adventures Travel N Tours",
+        time: "11:00",
+        detail: "Island activities and beach adventures."
+    },
+
+    "edrues-boracay": {
+        title: "Edrue's Travel and Tours",
+        time: "10:00",
+        detail: "Guided Boracay local experience."
+    },
+
+    "elnido-artcafe": {
+        title: "El Nido Boutique ArtCafe",
+        time: "12:00",
+        detail: "Lunch stop at El Nido ArtCafe."
+    },
+
+    "chocolate-batirol": {
+        title: "Choco-late de Batirol",
+        time: "08:00",
+        detail: "Traditional Baguio breakfast and hot chocolate."
+    },
+
+    "kermit-siargao": {
+        title: "Kermit Siargao Restaurant",
+        time: "18:00",
+        detail: "Dinner stop at popular Siargao restaurant."
+    },
+
+    "creative-cuisine-cebu": {
+        title: "Creative Cuisine Catering",
+        time: "12:00",
+        detail: "Catering and food service schedule."
+    },
+
+    "sea-breeze-boracay": {
+        title: "Sea Breeze Restaurant",
+        time: "19:00",
+        detail: "Beachfront dinner buffet in Boracay."
+    },
+
+    "honesty-coffee-batanes": {
+        title: "Honesty Coffee Shop & Restaurant",
+        time: "08:30",
+        detail: "Breakfast and coffee stop in Batanes."
     }
 };
 
@@ -537,7 +663,7 @@ function renderInsights(trip) {
     const cards = [
         { label: "Route Style", value: trip.routeLogic },
         { label: "Budget Fit", value: trip.budgetBand },
-        { label: "Travel Match", value: trip.travelerSummary },
+        { label: "Travel Type", value: trip.travelerSummary },
         { label: "Destination Logic", value: trip.destinationNote }
     ];
 
@@ -1300,7 +1426,7 @@ window.addEventListener("DOMContentLoaded", () => {
             routeLogic: "Manual",
             travelerSummary: "Solo traveler",
             destinationNote: "Marketplace booking",
-            budgetBand: "N/A",
+            budgetBand: "1,000",
             days: [{
                 id: createId("day"),
                 title: "Day 1",
@@ -1320,11 +1446,4 @@ window.addEventListener("DOMContentLoaded", () => {
     renderPlannerState();
 
     toast("Added marketplace booking!");
-});
-
-document.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-market-id]");
-    if (!btn) return;
-
-    addToItinerary(btn.dataset.marketId);
 });

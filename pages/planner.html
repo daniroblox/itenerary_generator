@@ -271,6 +271,82 @@
             <button class="btn" id="shareBtn" disabled type="button">Share Link</button>
         </div>
         <div id="tripInsights" class="insights-grid"></div>
+        <div id="routePreview" class="route-preview">
+            <article class="route-map-card">
+                <div class="route-map-head">
+                    <div>
+                        <p class="eyebrow">Route Map</p>
+                        <h3>Sample route preview</h3>
+                    </div>
+                    <span class="pill">Static Preview</span>
+                </div>
+                <div class="mock-map" aria-label="Static route map preview">
+                    <div class="map-grid"></div>
+                    <div class="map-road road-main"></div>
+                    <div class="map-road road-secondary"></div>
+                    <div class="map-pin" style="left: 16%; top: 66%;">
+                        <span>A</span>
+                        <small>Arrival area</small>
+                    </div>
+                    <div class="map-pin" style="left: 34%; top: 40%;">
+                        <span>B</span>
+                        <small>Activity cluster</small>
+                    </div>
+                    <div class="map-pin" style="left: 52%; top: 58%;">
+                        <span>C</span>
+                        <small>Departure point</small>
+                    </div>
+                </div>
+                <div class="route-stops">
+                    <div>
+                        <span>A</span>
+                        <strong>Arrival area</strong>
+                    </div>
+                    <div>
+                        <span>B</span>
+                        <strong>Activity cluster</strong>
+                    </div>
+                    <div>
+                        <span>C</span>
+                        <strong>Departure point</strong>
+                    </div>
+                </div>
+            </article>
+            <article class="transport-card">
+                <div class="route-map-head">
+                    <div>
+                        <p class="eyebrow">Transportation</p>
+                        <h3>Available options</h3>
+                    </div>
+                </div>
+                <div class="transport-list">
+                    <div class="transport-option">
+                        <div class="transport-icon">CAR</div>
+                        <div>
+                            <strong>Private car</strong>
+                            <span>Flexible option for route stops.</span>
+                        </div>
+                        <p>20-60 mins</p>
+                    </div>
+                    <div class="transport-option">
+                        <div class="transport-icon">BUS</div>
+                        <div>
+                            <strong>Public transport</strong>
+                            <span>Budget-friendly option for main roads and terminals.</span>
+                        </div>
+                        <p>30-90 mins</p>
+                    </div>
+                    <div class="transport-option">
+                        <div class="transport-icon">WALK</div>
+                        <div>
+                            <strong>Walking route</strong>
+                            <span>Useful for clustered attractions and food stops.</span>
+                        </div>
+                        <p>5-25 mins</p>
+                    </div>
+                </div>
+            </article>
+        </div>
         <div id="itineraryDays" class="days-grid">
             <div class="empty-state">
                 <h3>No itinerary yet</h3>

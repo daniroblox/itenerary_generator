@@ -207,15 +207,18 @@ function init() {
         renderPlannerState();
     }
 }
+
 //a dded today 5/28
 const marketplaceItems = {
     "walking-tour-baguio": {
+        type:"tour",
         title: "Baguio Creative Walking Tour",
         time: "10:00",
         detail: "Guided cultural walking tour featuring creative spots and local stories in Baguio."
     },
 
     "hotel-john-hay": {
+        type:"hotel",
         title: "John Hay Hotels Reservation",
         time: "14:00",
         detail: "Hotel check-in reservation inside Camp John Hay."
@@ -388,6 +391,53 @@ function hydrateMarketplacePick() {
     toast("Marketplace item added!");
 } //added
 
+function generateMarketplaceActivities(item) {
+    const base = {
+        id: createId("activity"),
+        time: item.time || "12:00",
+    };
+
+    switch (item.type) {
+
+        case "hotel":
+            return [
+                {
+                    ...base,
+                    title: "Check-in / Rest",
+                    detail: item.detail
+                },
+                {
+                    id: createId("activity"),
+                    time: "18:00",
+                    title: "Light walk / hotel surroundings",
+                    detail: "Relaxed exploration near accommodation."
+                }
+            ];
+
+        case "tour":
+            return [
+                {
+                    ...base,
+                    title: item.title,
+                    detail: "Guided activity start"
+                },
+                {
+                    id: createId("activity"),
+                    time: "13:00",
+                    title: "Free exploration / photo stops",
+                    detail: "Leisure walking and optional stops."
+                }
+            ];
+
+        default:
+            return [{
+                ...base,
+                title: item.title,
+                detail: item.detail
+            }];
+    }
+}
+
 function cacheRefs() {
     [
         "authForm",
@@ -433,7 +483,8 @@ function cacheRefs() {
         "itinerarySummary",
         "itineraryDays",
         "savedTrips",
-        "tripInsights"
+        "tripInsights",
+        "routePreview"
     ].forEach((id) => {
         refs[id] = document.getElementById(id);
     });
@@ -457,6 +508,11 @@ function bindPlannerPage() {
     refs.profileForm?.addEventListener("submit", handleProfileSubmit);
     refs.plannerForm?.addEventListener("submit", handleGenerateTrip);
     refs.fillSampleBtn?.addEventListener("click", fillSampleTrip);
+    refs.destination?.addEventListener("input", () => {
+        if (!state.currentTrip) {
+            renderRoutePreviewForDestination(refs.destination.value);
+        }
+    });
     refs.upgradeBtn?.addEventListener("click", upgradeToPremium);
     refs.starterPlanBtn?.addEventListener("click", downgradeToFree);
     refs.addDayBtn?.addEventListener("click", addManualDay);
@@ -474,11 +530,14 @@ function selectDestinationCard(card) {
 
     refs.destination.value = destination;
     refs.mood.value = mood;
+    state.currentTrip = null;
 
     document.querySelectorAll("[data-destination-choice]").forEach((item) => {
         item.classList.toggle("is-selected", item === card);
     });
 
+    renderCurrentTrip();
+    renderRoutePreviewForDestination(destination);
     toast(`${destination} selected. Trip mood set to ${mood}.`);
 }
 
@@ -613,6 +672,7 @@ function renderCurrentTrip() {
         refs.itineraryTitle.textContent = "Your itinerary will appear here";
         refs.itinerarySummary.textContent = "Generate a trip to unlock drag-and-drop editing and smarter travel planning.";
         refs.tripInsights.innerHTML = "";
+        renderRoutePreviewForDestination(refs.destination?.value || "");
         refs.itineraryDays.innerHTML = `
             <div class="empty-state">
                 <h3>No itinerary yet</h3>
@@ -625,6 +685,7 @@ function renderCurrentTrip() {
     refs.itineraryTitle.textContent = `${trip.destination} ${trip.durationLabel} itinerary`;
     refs.itinerarySummary.textContent = `${trip.dateLabel} | ${trip.travelerType} | ${trip.mood} | ${trip.planNote}`;
     renderInsights(trip);
+    renderRoutePreview(trip);
 
     refs.itineraryDays.innerHTML = trip.days.map((day, index) => `
         <article class="day-card">
@@ -663,7 +724,7 @@ function renderInsights(trip) {
     const cards = [
         { label: "Route Style", value: trip.routeLogic },
         { label: "Budget Fit", value: trip.budgetBand },
-        { label: "Travel Type", value: trip.travelerSummary },
+        { label: "Travel Match", value: trip.travelerSummary },
         { label: "Destination Logic", value: trip.destinationNote }
     ];
 
@@ -673,6 +734,192 @@ function renderInsights(trip) {
             <strong>${card.value}</strong>
         </article>
     `).join("");
+}
+
+function renderRoutePreviewForDestination(destination) {
+    if (!refs.routePreview) {
+        return;
+    }
+
+    const normalized = toTitleCase(destination) || "Sample";
+    const catalog = getDestinationData(normalized);
+    const routeStops = [
+        `${normalized} arrival area`,
+        catalog.attractions[0] || `${normalized} activity cluster`,
+        catalog.attractions[1] || `${normalized} departure point`
+    ];
+    const transportOptions = buildTransportOptions({ destination: normalized });
+
+    renderRoutePreviewContent({
+        title: normalized === "Sample" ? "Sample route preview" : `${normalized} sample route`,
+        label: normalized === "Sample" ? "Static route map preview" : `Static route map preview for ${normalized}`,
+        routeStops,
+        transportOptions
+    });
+}
+
+function renderRoutePreview(trip) {
+    if (!refs.routePreview) {
+        return;
+    }
+
+    const transportOptions = buildTransportOptions(trip);
+    const routeStops = buildRouteStops(trip);
+
+    renderRoutePreviewContent({
+        title: `${trip.destination} sample route`,
+        label: `Static route map preview for ${trip.destination}`,
+        routeStops,
+        transportOptions
+    });
+}
+
+function renderRoutePreviewContent({ title, label, routeStops, transportOptions }) {
+    const routePoints = buildRoutePoints(routeStops);
+
+    refs.routePreview.hidden = false;
+    refs.routePreview.innerHTML = `
+        <article class="route-map-card">
+            <div class="route-map-head">
+                <div>
+                    <p class="eyebrow">Route Map</p>
+                    <h3>${title}</h3>
+                </div>
+                <span class="pill">Static Preview</span>
+            </div>
+            <div class="mock-map" aria-label="${label}">
+                <div class="map-grid"></div>
+                <div class="map-road road-main"></div>
+                <div class="map-road road-secondary"></div>
+                <div class="map-road road-tertiary"></div>
+                ${routePoints.map((point, index) => `
+                    <div class="map-pin" style="left: ${point.left}%; top: ${point.top}%;">
+                        <span>${String.fromCharCode(65 + index)}</span>
+                        <small>${point.stop}</small>
+                    </div>
+                `).join("")}
+            </div>
+            <div class="route-stops">
+                ${routeStops.map((stop, index) => `
+                    <div>
+                        <span>${String.fromCharCode(65 + index)}</span>
+                        <strong>${stop}</strong>
+                    </div>
+                `).join("")}
+            </div>
+        </article>
+        <article class="transport-card">
+            <div class="route-map-head">
+                <div>
+                    <p class="eyebrow">Transportation</p>
+                    <h3>Available options</h3>
+                </div>
+            </div>
+            <div class="transport-list">
+                ${transportOptions.map((option) => `
+                    <div class="transport-option">
+                        <div class="transport-icon">${option.icon}</div>
+                        <div>
+                            <strong>${option.name}</strong>
+                            <span>${option.detail}</span>
+                        </div>
+                        <p>${option.estimate}</p>
+                    </div>
+                `).join("")}
+            </div>
+        </article>
+    `;
+}
+
+function buildRoutePoints(routeStops) {
+    const positions = [
+        { left: 16, top: 66 },
+        { left: 34, top: 40 },
+        { left: 52, top: 58 },
+        { left: 68, top: 32 },
+        { left: 82, top: 62 },
+        { left: 58, top: 78 }
+    ];
+
+    return routeStops.slice(0, positions.length).map((stop, index) => ({
+        ...positions[index],
+        stop
+    }));
+}
+
+function buildRouteStops(trip) {
+
+    const stops = [];
+
+    stops.push(`${trip.destination} Arrival`);
+
+    const allActivities = [];
+
+    trip.days.forEach((day) => {
+        day.activities.forEach((act) => {
+            allActivities.push(act.title);
+        });
+    });
+
+    // remove duplicates + empty
+    const unique = [...new Set(allActivities)].filter(Boolean);
+
+    // B - D (force at least 3 extra stops)
+    for (let i = 0; i < 3; i++) {
+        stops.push(unique[i] || `${trip.destination} Activity ${i + 1}`);
+    }
+
+    return stops.slice(0, 4); // A–D lang
+}
+
+/*function buildRouteStops(trip) {
+    const dayStops = trip.days.map((day, index) => {
+        const highlight = day.activities[2] || day.activities[0];
+        return `Day ${index + 1}: ${highlight?.title || day.title}`;
+    });
+
+    return dayStops.slice(0, 6);
+}*/
+
+function buildTransportOptions(trip) {
+    const destinationModes = {
+        Baguio: [
+            { icon: "BUS", name: "Provincial bus", detail: "Good for Manila to Baguio transfers.", estimate: "4-6 hrs" },
+            { icon: "TAXI", name: "Taxi or ride-hailing", detail: "Best for city-to-city stops and hotel transfers.", estimate: "15-35 mins" },
+            { icon: "WALK", name: "Walking route", detail: "Useful around parks, cafes, and Session Road.", estimate: "5-20 mins" }
+        ],
+        Siargao: [
+            { icon: "VAN", name: "Airport van", detail: "Prototype option for airport to General Luna.", estimate: "45-60 mins" },
+            { icon: "BIKE", name: "Motorbike rental", detail: "Common island option for beaches and cafes.", estimate: "Flexible" },
+            { icon: "BOAT", name: "Boat transfer", detail: "For lagoons and island hopping activities.", estimate: "Half day" }
+        ],
+        Palawan: [
+            { icon: "VAN", name: "Shared van", detail: "For airport, hotel, and port transfers.", estimate: "30-90 mins" },
+            { icon: "BOAT", name: "Island boat", detail: "Used for lagoon, reef, and beach routes.", estimate: "Half day" },
+            { icon: "TRI", name: "Tricycle", detail: "Short local hops around town areas.", estimate: "10-25 mins" }
+        ],
+        Cebu: [
+            { icon: "CAR", name: "Private car", detail: "Best for city routes and mountain viewpoints.", estimate: "20-60 mins" },
+            { icon: "BUS", name: "Bus or coach", detail: "Budget option for north or south Cebu day trips.", estimate: "1-4 hrs" },
+            { icon: "FERRY", name: "Ferry", detail: "For island transfers and nearby coastal routes.", estimate: "1-2 hrs" }
+        ],
+        Boracay: [
+            { icon: "BOAT", name: "Caticlan boat", detail: "Prototype transfer from port to island.", estimate: "10-20 mins" },
+            { icon: "E-TRI", name: "E-tricycle", detail: "Station-to-station beach area transport.", estimate: "5-20 mins" },
+            { icon: "WALK", name: "Beach walk", detail: "Best for White Beach and D'Mall routes.", estimate: "5-30 mins" }
+        ],
+        Batanes: [
+            { icon: "VAN", name: "Tour van", detail: "Common for scenic loops and viewpoint routes.", estimate: "Half day" },
+            { icon: "BIKE", name: "Bike rental", detail: "For short, slow scenic routes near town.", estimate: "Flexible" },
+            { icon: "WALK", name: "Walking route", detail: "Good for village stops and lighthouse areas.", estimate: "10-30 mins" }
+        ]
+    };
+
+    return destinationModes[trip.destination] || [
+        { icon: "CAR", name: "Private car", detail: `Flexible option for ${trip.destination} route stops.`, estimate: "20-60 mins" },
+        { icon: "BUS", name: "Public transport", detail: "Budget-friendly option for main roads and terminals.", estimate: "30-90 mins" },
+        { icon: "WALK", name: "Walking route", detail: "Useful for clustered attractions and food stops.", estimate: "5-25 mins" }
+    ];
 }
 
 function bindTripEditorEvents() {
@@ -1141,6 +1388,9 @@ function fillSampleTrip() {
 
     refs.startDate.value = toDateInputValue(start);
     refs.endDate.value = toDateInputValue(end);
+    state.currentTrip = null;
+    renderCurrentTrip();
+    renderRoutePreviewForDestination("Palawan");
     toast("Sample trip loaded.");
 }
 
@@ -1237,6 +1487,8 @@ function seedPlannerDefaults() {
     if (refs.lifestyle && state.profile.lifestyle) {
         refs.lifestyle.value = state.profile.lifestyle;
     }
+
+    renderRoutePreviewForDestination(refs.destination?.value || "");
 }
 
 function syncPremiumUI() {
@@ -1436,12 +1688,9 @@ window.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    state.currentTrip.days[0].activities.push({
-        id: createId("activity"),
-        time: item.time || "10:00",
-        title: item.title,
-        detail: item.detail
-    });
+   const activities = generateMarketplaceActivities(item);
+
+    state.currentTrip.days[0].activities.push(...activities);
 
     renderPlannerState();
 

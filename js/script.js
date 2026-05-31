@@ -225,132 +225,154 @@ const marketplaceItems = {
     },
 
     "four-points-palawan": {
+        type:"hotel",
         title: "Four Points by Sheraton Palawan",
         time: "15:00",
         detail: "Beachfront resort stay in Palawan."
     },
 
     "harana-surf-resort": {
+        type:"hotel",   
         title: "Harana Surf Resort Stay",
         time: "14:00",
         detail: "Relaxing surf resort accommodation in Siargao."
     },
 
     "shangrila-mactan": {
+        type:"hotel",
         title: "Shangri-La Mactan Cebu",
         time: "15:00",
         detail: "Luxury beachfront Cebu resort booking."
     },
 
     "fundacion-pacita": {
+        type:"hotel",
         title: "Fundacion Pacita Batanes",
         time: "14:00",
         detail: "Hilltop heritage hotel experience in Batanes."
     },
 
     "henann-regency": {
+        type:"hotel",
         title: "Henann Regency Resort & Spa",
         time: "15:00",
         detail: "Beachfront Boracay resort accommodation."
     },
 
     "south-shore-siargao": {
+        type:"tour",
         title: "South Shore Siargao Tours",
         time: "09:00",
         detail: "Island hopping and guided Siargao tour."
     },
 
     "island-trek-cebu": {
+        type:"tour",
         title: "Island Trek Tours Cebu",
         time: "08:30",
         detail: "Cebu city and mountain guided tour."
     },
 
     "ivatan-guides": {
+        type:"tour",
         title: "Ivatan Cultural Guides",
         time: "09:00",
         detail: "Cultural Batanes guided experience."
     },
 
     "sky-ranch-baguio": {
+        type:"activities",
         title: "Sky Ranch Baguio Visit",
         time: "16:00",
         detail: "Enjoy rides and scenic attractions in Baguio."
     },
 
     "harana-surf-school": {
+        type:"activities",
         title: "Harana Surf School",
         time: "07:00",
         detail: "Surf lessons and board rental in Siargao."
     },
 
     "7-wonders-palawan": {
+        type:"tour",
         title: "7 Wonders Adventures Tour",
         time: "08:00",
         detail: "Island and land tours around Palawan."
     },
 
     "badian-canyoneering": {
+        type:"activities",
         title: "Badian Cebu Canyoneering",
         time: "06:00",
         detail: "Adventure canyoneering activity in Cebu."
     },
 
     "underground-river": {
+        type:"activities",
         title: "Puerto Princesa Underground River Tour",
         time: "08:00",
         detail: "Guided underground river eco-tour."
     },
 
     "batanes-island-hopping": {
+        type:"tour",
         title: "Batanes Island Hopping",
         time: "09:00",
         detail: "Scenic island hopping activity in Batanes."
     },
 
     "boracay-adventures": {
+        type:"tour",
         title: "Boracay Adventures Travel N Tours",
         time: "11:00",
         detail: "Island activities and beach adventures."
     },
 
     "edrues-boracay": {
+        type:"tour",
         title: "Edrue's Travel and Tours",
         time: "10:00",
         detail: "Guided Boracay local experience."
     },
 
     "elnido-artcafe": {
+        type:"fnb",
         title: "El Nido Boutique ArtCafe",
         time: "12:00",
         detail: "Lunch stop at El Nido ArtCafe."
     },
 
     "chocolate-batirol": {
+        type:"fnb",
         title: "Choco-late de Batirol",
         time: "08:00",
         detail: "Traditional Baguio breakfast and hot chocolate."
     },
 
     "kermit-siargao": {
+        type:"fnb",
         title: "Kermit Siargao Restaurant",
         time: "18:00",
         detail: "Dinner stop at popular Siargao restaurant."
     },
 
     "creative-cuisine-cebu": {
+        type:"fnb",
         title: "Creative Cuisine Catering",
         time: "12:00",
         detail: "Catering and food service schedule."
     },
 
     "sea-breeze-boracay": {
+        type:"fnb",
         title: "Sea Breeze Restaurant",
         time: "19:00",
         detail: "Beachfront dinner buffet in Boracay."
     },
 
     "honesty-coffee-batanes": {
+        type:"fnb", 
         title: "Honesty Coffee Shop & Restaurant",
         time: "08:30",
         detail: "Breakfast and coffee stop in Batanes."
@@ -389,7 +411,16 @@ function hydrateMarketplacePick() {
 
     renderCurrentTrip();
     toast("Marketplace item added!");
-} //added
+} 
+
+function addMinutes(time, minutesToAdd) {
+    const [h, m] = time.split(":").map(Number);
+    const date = new Date();
+    date.setHours(h, m || 0, 0, 0);
+    date.setMinutes(date.getMinutes() + minutesToAdd);
+
+    return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+}
 
 function generateMarketplaceActivities(item) {
     const base = {
@@ -403,15 +434,24 @@ function generateMarketplaceActivities(item) {
             return [
                 {
                     ...base,
-                    title: "Check-in / Rest",
-                    detail: item.detail
+                    title: item.title,
+                    detail: item.detail,
+                    category: "hotel",
                 },
                 {
                     id: createId("activity"),
-                    time: "18:00",
+                    time: addMinutes(base.time, 60), 
                     title: "Light walk / hotel surroundings",
-                    detail: "Relaxed exploration near accommodation."
-                }
+                    detail: "Relaxed exploration near accommodation.",
+                    category: "hotel"
+                },
+                {
+                    id: createId("activity"),
+                    time: addMinutes(base.time, 120), 
+                    title: "The Garden Grounds Exploration",
+                    detail: "Explore nearby scenic hotel surroundings and gardens.",
+                    category: "hotel"
+                },
             ];
 
         case "tour":
@@ -419,13 +459,70 @@ function generateMarketplaceActivities(item) {
                 {
                     ...base,
                     title: item.title,
-                    detail: "Guided activity start"
+                    detail: item.detail,
+                    category: "tour"
                 },
                 {
                     id: createId("activity"),
-                    time: "13:00",
+                    time: addMinutes(base.time, 60), 
                     title: "Free exploration / photo stops",
-                    detail: "Leisure walking and optional stops."
+                    detail: "Leisure walking and optional stops.",
+                    category: "tour"
+                },
+                {
+                    id: createId("activity"),
+                    time: addMinutes(base.time, 180), 
+                    title: "Session Road Cultural Walk",
+                    detail: "Explore cafes, street art, and local shops.",
+                    category: "tour"
+                },
+            ];
+
+        case "fnb":
+            return [
+                {
+                    ...base,
+                    title: item.title,
+                    detail: item.detail,
+                    category: "fnb"
+                },
+                {
+                    id: createId("activity"),
+                    time: addMinutes(base.time, 60), 
+                    title: "Dining Experience",
+                    detail: "Enjoy signature dishes and local specialties.",
+                    category: "fnb"
+                },
+                {
+                    id: createId("activity"),
+                    time: addMinutes(base.time, 240), 
+                    title: "Coffee / Dessert Break",
+                    detail: "Relax with coffee, dessert, or refreshments.",
+                    category: "fnb"
+                }
+            ];
+
+        case "activities":
+            return [
+                {
+                    ...base,
+                    title: item.title,
+                    detail: item.detail,
+                    category: "activities"
+                },
+                {
+                    id: createId("activities"),
+                    time: addMinutes(base.time, 120), 
+                    title: "Explore Nearby Attractions",
+                    detail: "Visit nearby points of interest and scenic spots.",
+                    category: "activities"
+                },
+                {
+                    id: createId("activities"),
+                    time: addMinutes(base.time, 300), 
+                    title: "Photo Opportunity",
+                    detail: "Take photos and enjoy the surroundings.",
+                    category: "activities"
                 }
             ];
 
@@ -1678,7 +1775,7 @@ window.addEventListener("DOMContentLoaded", () => {
             routeLogic: "Manual",
             travelerSummary: "Solo traveler",
             destinationNote: "Marketplace booking",
-            budgetBand: "1,000",
+            budgetBand: "₱100,000",
             days: [{
                 id: createId("day"),
                 title: "Day 1",
@@ -1695,4 +1792,20 @@ window.addEventListener("DOMContentLoaded", () => {
     renderPlannerState();
 
     toast("Added marketplace booking!");
+});
+
+document.querySelectorAll("[data-type]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+        const type = btn.dataset.type;
+
+        if (type === "sponsored") {
+            toast("This is a Sponsored listing.");
+        } 
+        else if (type === "featured") {
+            toast("This is a Featured listing.");
+        } 
+        else {
+            toast("No information available.");
+        }
+    });
 });

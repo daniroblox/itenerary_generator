@@ -1761,29 +1761,61 @@ window.addEventListener("DOMContentLoaded", () => {
     localStorage.removeItem("pendingMarketplaceItem");
 
     if (!state.currentTrip) {
-        state.currentTrip = {
-            id: createId("trip"),
-            destination: "Marketplace Booking",
-            durationLabel: "1 day",
-            dateLabel: "Today",
-            travelerType: "Solo",
-            mood: "Relaxing",
-            plan: "free",
-            title: "Marketplace Trip",
-            summary: "Auto created from marketplace",
-            planNote: "Marketplace injected",
-            routeLogic: "Manual",
-            travelerSummary: "Solo traveler",
-            destinationNote: "Marketplace booking",
-            budgetBand: "₱100,000",
-            days: [{
-                id: createId("day"),
-                title: "Day 1",
-                note: "Marketplace Day",
-                activities: []
-            }]
-        };
-    }
+
+    const typeMeta = {
+        hotel: {
+            routeLogic: "Stay-focused scheduling with relaxation buffers",
+            travelerSummary: "Designed for comfort-oriented accommodation stays",
+            destinationNote: "Hotel booking experience with local access points",
+            budgetBand: "Accommodation-based budget allocation"
+        },
+        tour: {
+            routeLogic: "Guided itinerary with structured sightseeing flow",
+            travelerSummary: "Designed for curated tours and cultural exploration",
+            destinationNote: "Tour-based itinerary with organized stops",
+            budgetBand: "Activity-focused travel spending"
+        },
+        activities: {
+            routeLogic: "High-activity flexible adventure scheduling",
+            travelerSummary: "Designed for active exploration and experiences",
+            destinationNote: "Activity-based travel experience",
+            budgetBand: "Experience-driven budget allocation"
+        },
+        fnb: {
+            routeLogic: "Food-centric pacing with dining intervals",
+            travelerSummary: "Designed for culinary exploration and food stops",
+            destinationNote: "Food and beverage itinerary integration",
+            budgetBand: "Dining-focused budget planning"
+        }
+    };
+
+    const meta = typeMeta[item.type] || typeMeta.activities;
+
+    state.currentTrip = {
+        id: createId("trip"),
+        destination: "Marketplace Booking",
+        durationLabel: "1 day",
+        dateLabel: "Today",
+        travelerType: "Solo",
+        mood: "Relaxing",
+        plan: "free",
+        title: "Marketplace Trip",
+        summary: "Auto created from marketplace",
+        planNote: "Marketplace injected",
+
+        routeLogic: meta.routeLogic,
+        travelerSummary: meta.travelerSummary,
+        destinationNote: meta.destinationNote,
+        budgetBand: meta.budgetBand,
+
+        days: [{
+            id: createId("day"),
+            title: "Day 1",
+            note: "Marketplace Day",
+            activities: []
+        }]
+    };
+}
 
    const activities = generateMarketplaceActivities(item);
 

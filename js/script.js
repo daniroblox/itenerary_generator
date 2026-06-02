@@ -208,7 +208,6 @@ function init() {
     }
 }
 
-//a dded today 5/28
 const marketplaceItems = {
     "walking-tour-baguio": {
         type:"tour",
@@ -376,6 +375,32 @@ const marketplaceItems = {
         title: "Honesty Coffee Shop & Restaurant",
         time: "08:30",
         detail: "Breakfast and coffee stop in Batanes."
+    },
+    "parasailing": {
+        type: "activities",
+        title: "Parasailing Adventure",
+        time: "11:00",
+        detail: "Aerial parasailing activity with panoramic coastal views."
+    },
+
+    "beach-hair-braiding": {
+        type: "activities",
+        title: "Beach Hair Braiding",
+        time: "15:00",
+        detail: "Traditional beach hair braiding by local artisans."
+    },
+    "island-hopping": {
+        type: "activities",
+        title: "Island Hopping Adventure",
+        time: "09:00",
+        detail: "Boat tour exploring nearby islands, beaches, and snorkeling spots."
+    },
+    
+    "helmet-diving": {
+        type: "activities",
+        title: "Helmet Diving Experience",
+        time: "14:00",
+        detail: "Underwater walk with helmet gear to view marine life up close."
     }
 };
 
